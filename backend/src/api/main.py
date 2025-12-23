@@ -60,7 +60,7 @@ def get_all_urls(base_url: str) -> List[str]:
     # Enhanced approach: First try to get the sitemap and map all URLs to the production domain
     sitemap_url = urljoin(base_url, 'sitemap.xml')
     try:
-        sitemap_response = requests.get(sitemap_url, timeout=10)
+        sitemap_response = requests.get(sitemap_url, timeout=30)  # Increased timeout
         if sitemap_response.status_code == 200:
             logger.info("Found sitemap, extracting URLs and mapping to production domain...")
             import re
@@ -72,43 +72,26 @@ def get_all_urls(base_url: str) -> List[str]:
             for url in urls_from_text:
                 url = url.strip()
 
-                # Map preview URLs to production domain
+                # Map preview URLs to the new production domain
                 if 'hackathon-4-git-' in url and '.vercel.app' in url:
-                    # Extract the path from the preview URL and map to production domain
+                    # Extract the path from the preview URL and map to new production domain
                     parsed_preview = urlparse(url)
-                    production_url = f"https://hackathon-4-puce.vercel.app{parsed_preview.path}"
+                    production_url = f"https://hackathon-4-new.vercel.app{parsed_preview.path}"
                     if any(pattern in production_url for pattern in content_patterns):
-                        # Quick check if the URL is accessible before adding it
-                        try:
-                            response = requests.head(production_url, timeout=5)
-                            if response.status_code == 200:
-                                urls.add(production_url)
-                                production_urls_found += 1
-                            else:
-                                # If HEAD fails, try GET as fallback
-                                response = requests.get(production_url, timeout=5)
-                                if response.status_code == 200:
-                                    urls.add(production_url)
-                                    production_urls_found += 1
-                        except:
-                            # If the URL is not accessible, skip it
-                            continue
-                elif url.startswith('https://hackathon-4-puce.vercel.app') and any(pattern in url for pattern in content_patterns):
-                    # Already a production URL, check if accessible
-                    try:
-                        response = requests.head(url, timeout=5)
-                        if response.status_code == 200:
-                            urls.add(url)
-                            production_urls_found += 1
-                        else:
-                            # If HEAD fails, try GET as fallback
-                            response = requests.get(url, timeout=5)
-                            if response.status_code == 200:
-                                urls.add(url)
-                                production_urls_found += 1
-                    except:
-                        # If the URL is not accessible, skip it
-                        continue
+                        # Add the URL from sitemap without checking accessibility (sitemap represents intended structure)
+                        urls.add(production_url)
+                        production_urls_found += 1
+
+                        # Also add variant with trailing slash for Docusaurus compatibility
+                        urls.add(production_url + '/')
+
+                elif url.startswith('https://hackathon-4-new.vercel.app') and any(pattern in url for pattern in content_patterns):
+                    # Already a new production URL from sitemap
+                    urls.add(url)
+                    production_urls_found += 1
+
+                    # Also add variant with trailing slash for Docusaurus compatibility
+                    urls.add(url + '/')
 
             logger.info(f"Found {production_urls_found} production URLs from sitemap mapped to production domain")
     except Exception as e:
@@ -116,7 +99,7 @@ def get_all_urls(base_url: str) -> List[str]:
 
     # First, directly fetch the base URL to extract all links from the homepage
     try:
-        base_response = requests.get(base_url, timeout=15)
+        base_response = requests.get(base_url, timeout=30)  # Increased timeout
         base_response.raise_for_status()
         base_soup = BeautifulSoup(base_response.content, 'html.parser')
 
@@ -132,7 +115,11 @@ def get_all_urls(base_url: str) -> List[str]:
             if (parsed_url.netloc == base_domain and
                 absolute_url.startswith(base_url) and
                 any(pattern in absolute_url for pattern in content_patterns)):
+                # Add the URL without checking accessibility (will be checked during extraction)
                 urls.add(absolute_url)
+
+                # Also add variant with trailing slash for Docusaurus compatibility
+                urls.add(absolute_url + '/')
 
         logger.info(f"Found {len(urls)} URLs directly from homepage")
     except Exception as e:
@@ -399,7 +386,7 @@ def main():
         logger.info("Environment validated successfully")
 
         # Use the deployed link provided by the user
-        deployed_url = "https://hackathon-4-puce.vercel.app/"
+        deployed_url = "https://hackathon-4-new.vercel.app/"
 
         # Step 1: Get all URLs
         logger.info("Step 1: Getting all URLs from deployed site...")

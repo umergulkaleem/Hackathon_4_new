@@ -46,7 +46,10 @@
       "Bash(pip install:*)",
       "Bash(curl -I https://hackathon-4-puce.vercel.app/docs/intro)",
       "Bash(curl -s https://hackathon-4-puce.vercel.app/sitemap.xml)",
-      "Bash(curl -s https://hackathon-4-puce.vercel.app/)"
+      "Bash(curl -s https://hackathon-4-puce.vercel.app/)",
+      "Bash(timeout 60 python -m src.api.main)",
+      "Bash(curl -I https://hackathon-4-new.vercel.app/)",
+      "Bash(curl -I https://hackathon-4-new.vercel.app/docs/intro)"
     ],
     "deny": [],
     "ask": []
