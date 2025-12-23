@@ -1,0 +1,7 @@
+cohere==5.5.8
+qdrant-client==1.9.1
+beautifulsoup4==4.12.3
+markdown==3.6
+python-dotenv==1.0.1
+requests==2.31.0
+pydantic==2.7.1

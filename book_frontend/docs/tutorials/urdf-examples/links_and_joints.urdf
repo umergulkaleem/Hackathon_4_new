@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<robot name="links_and_joints_example">
+  <!-- Base link (root) -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.2" radius="0.1"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.2" radius="0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Fixed joint example -->
+  <link name="fixed_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.05" ixy="0.0" ixz="0.0" iyy="0.05" iyz="0.0" izz="0.05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Fixed joint connecting base to fixed link -->
+  <joint name="fixed_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="fixed_link"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Revolute joint example -->
+  <link name="revolute_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.05" ixy="0.0" ixz="0.0" iyy="0.05" iyz="0.0" izz="0.05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Revolute joint connecting base to revolute link -->
+  <joint name="revolute_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="revolute_link"/>
+    <origin xyz="0.2 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57" upper="1.57" effort="10" velocity="1"/>
+  </joint>
+
+  <!-- Continuous joint example -->
+  <link name="continuous_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.05" ixy="0.0" ixz="0.0" iyy="0.05" iyz="0.0" izz="0.05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+      <material name="yellow">
+        <color rgba="1 1 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Continuous joint connecting base to continuous link -->
+  <joint name="continuous_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="continuous_link"/>
+    <origin xyz="-0.2 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Prismatic joint example -->
+  <link name="prismatic_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.05" ixy="0.0" ixz="0.0" iyy="0.05" iyz="0.0" izz="0.05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.2"/>
+      </geometry>
+      <material name="purple">
+        <color rgba="0.5 0 0.5 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.2"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Prismatic joint connecting base to prismatic link -->
+  <joint name="prismatic_joint" type="prismatic">
+    <parent link="base_link"/>
+    <child link="prismatic_link"/>
+    <origin xyz="0 0.2 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.1" upper="0.1" effort="10" velocity="1"/>
+  </joint>
+</robot>

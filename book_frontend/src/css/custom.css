@@ -1,0 +1,73 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/* You can override the default Docusaurus variables here. */
+:root {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-code-font-size: 95%;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+}
+
+/* Custom styles for ROS 2 educational content */
+.ros-node-diagram {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #f9f9f9;
+}
+
+.ros-topic-label {
+  background-color: #e3f2fd;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Code block styling for Python examples */
+.language-python {
+  background-color: #f8f8f8;
+}
+
+/* Assessment and exercise styling */
+.exercise-container {
+  border-left: 4px solid #25c2a0;
+  padding: 15px;
+  margin: 20px 0;
+  background-color: #f0f8ff;
+}
+
+.assessment-question {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Robot visualization styling */
+.robot-model-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.robot-model-container img {
+  max-width: 100%;
+  height: auto;
+}

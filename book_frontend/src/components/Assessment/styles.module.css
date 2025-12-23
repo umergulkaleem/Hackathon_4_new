@@ -1,0 +1,77 @@
+.assessmentContainer {
+  border: 2px solid #25c2a0;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  background-color: #f8fff8;
+}
+
+.question {
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 1.1em;
+}
+
+.form {
+  margin-top: 15px;
+}
+
+.option {
+  margin: 10px 0;
+}
+
+.optionLabel {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.submitButton {
+  background-color: #25c2a0;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.submitButton:hover {
+  background-color: #21af90;
+}
+
+.result {
+  margin-top: 15px;
+}
+
+.correct {
+  color: #2e7d32;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.incorrect {
+  color: #c62828;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.explanation {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #e8f5e9;
+  border-left: 3px solid #4caf50;
+}
+
+.resetButton {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.resetButton:hover {
+  background-color: #1565c0;
+}

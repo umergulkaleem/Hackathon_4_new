@@ -1,0 +1,231 @@
+/* VLA Module Specific Styling */
+
+/* Code block styling for VLA examples */
+.vla-code-block {
+  background-color: #f8f9fa;
+  border-left: 4px solid #007acc;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0 4px 4px 0;
+  overflow-x: auto;
+}
+
+.vla-code-block .code-block {
+  background: none;
+  padding: 0;
+}
+
+/* VLA concept cards */
+.vla-concept-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  background-color: #f9f9f9;
+}
+
+.vla-concept-card h3 {
+  color: #007acc;
+  margin-top: 0;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+}
+
+/* Interactive exercise styling */
+.vla-exercise-container {
+  border: 2px dashed #007acc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  background-color: #f0f8ff;
+}
+
+.vla-exercise-title {
+  color: #007acc;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* LLM interaction styling */
+.vla-llm-response {
+  background-color: #e8f4fd;
+  border-left: 4px solid #28a745;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.vla-llm-input {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Navigation and structure */
+.vla-section {
+  margin: 2rem 0;
+  padding: 1rem 0;
+}
+
+.vla-section-title {
+  border-bottom: 2px solid #007acc;
+  padding-bottom: 0.5rem;
+  color: #333;
+}
+
+/* ROS 2 code snippets */
+.ros-code {
+  font-family: 'Courier New', monospace;
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  padding: 0.5rem;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.ros-node {
+  color: #ff6b6b;
+}
+
+.ros-topic {
+  color: #5e8bde;
+}
+
+.ros-service {
+  color: #a66fb5;
+}
+
+.ros-action {
+  color: #4ec9b0;
+}
+
+/* Assessment styling */
+.vla-assessment {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.vla-question {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.vla-question:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.vla-answer-options {
+  margin-top: 0.5rem;
+}
+
+.vla-answer-option {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.vla-answer-option:hover {
+  background-color: #e9ecef;
+}
+
+.vla-answer-option.selected {
+  background-color: #007acc;
+  color: white;
+}
+
+/* System architecture diagrams */
+.vla-architecture {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.vla-component {
+  display: inline-block;
+  background-color: #007acc;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+/* Troubleshooting styling */
+.vla-troubleshooting {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.vla-troubleshooting h3 {
+  color: #856404;
+  margin-top: 0;
+}
+
+.vla-error-block {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+.vla-solution-block {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Quick reference styling */
+.vla-reference-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.vla-reference-table th,
+.vla-reference-table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.vla-reference-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .vla-code-block,
+  .vla-concept-card,
+  .vla-exercise-container,
+  .vla-assessment,
+  .vla-troubleshooting {
+    padding: 1rem;
+    margin: 0.5rem 0;
+  }
+
+  .vla-component {
+    display: block;
+    margin: 0.25rem auto;
+  }
+}
