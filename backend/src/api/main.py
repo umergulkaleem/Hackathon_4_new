@@ -20,6 +20,39 @@ from ..lib.logging import logger
 from ..lib.utils import validate_environment
 
 
+def normalize_url_for_docusaurus(url: str, trailing_slash: bool = False) -> str:
+    """
+    Normalize URL to match Docusaurus routing requirements.
+
+    Args:
+        url: URL to normalize
+        trailing_slash: Whether to ensure trailing slash (set to False for Docusaurus without trailing slash)
+
+    Returns:
+        Normalized URL
+    """
+    from urllib.parse import urlparse, urlunparse
+
+    parsed = urlparse(url)
+
+    # Ensure proper path format for Docusaurus (without trailing slash)
+    path = parsed.path
+    if trailing_slash and not path.endswith('/'):
+        path += '/'
+    elif not trailing_slash and path.endswith('/'):
+        path = path.rstrip('/')
+
+    # Ensure no double slashes
+    path = path.replace('//', '/')
+
+    # Special handling for Docusaurus: remove trailing slash for documentation pages
+    if '/docs/' in path and path.endswith('/'):
+        path = path.rstrip('/')
+
+    normalized = parsed._replace(path=path)
+    return urlunparse(normalized)
+
+
 def get_all_urls(base_url: str) -> List[str]:
     """
     Get all URLs from the deployed site by crawling and discovering links.
@@ -78,20 +111,16 @@ def get_all_urls(base_url: str) -> List[str]:
                     parsed_preview = urlparse(url)
                     production_url = f"https://hackathon-4-new.vercel.app{parsed_preview.path}"
                     if any(pattern in production_url for pattern in content_patterns):
-                        # Add the URL from sitemap without checking accessibility (sitemap represents intended structure)
-                        urls.add(production_url)
+                        # Normalize the URL for Docusaurus routing with trailing slash
+                        normalized_url = normalize_url_for_docusaurus(production_url, trailing_slash=True)
+                        urls.add(normalized_url)
                         production_urls_found += 1
-
-                        # Also add variant with trailing slash for Docusaurus compatibility
-                        urls.add(production_url + '/')
 
                 elif url.startswith('https://hackathon-4-new.vercel.app') and any(pattern in url for pattern in content_patterns):
                     # Already a new production URL from sitemap
-                    urls.add(url)
+                    normalized_url = normalize_url_for_docusaurus(url, trailing_slash=True)
+                    urls.add(normalized_url)
                     production_urls_found += 1
-
-                    # Also add variant with trailing slash for Docusaurus compatibility
-                    urls.add(url + '/')
 
             logger.info(f"Found {production_urls_found} production URLs from sitemap mapped to production domain")
     except Exception as e:
@@ -115,11 +144,9 @@ def get_all_urls(base_url: str) -> List[str]:
             if (parsed_url.netloc == base_domain and
                 absolute_url.startswith(base_url) and
                 any(pattern in absolute_url for pattern in content_patterns)):
-                # Add the URL without checking accessibility (will be checked during extraction)
-                urls.add(absolute_url)
-
-                # Also add variant with trailing slash for Docusaurus compatibility
-                urls.add(absolute_url + '/')
+                # Normalize the URL for Docusaurus routing with trailing slash
+                normalized_url = normalize_url_for_docusaurus(absolute_url, trailing_slash=True)
+                urls.add(normalized_url)
 
         logger.info(f"Found {len(urls)} URLs directly from homepage")
     except Exception as e:
@@ -145,7 +172,8 @@ def get_all_urls(base_url: str) -> List[str]:
                 # Add current URL to the set of URLs to process if it's likely to have content
                 has_content = any(pattern in current_url for pattern in content_patterns) or current_url == base_url
                 if has_content:
-                    urls.add(current_url)
+                    normalized_url = normalize_url_for_docusaurus(current_url, trailing_slash=True)
+                    urls.add(normalized_url)
 
                 # Parse the HTML content
                 soup = BeautifulSoup(response.content, 'html.parser')
@@ -174,8 +202,10 @@ def get_all_urls(base_url: str) -> List[str]:
                             # Check if it matches content patterns or is a likely page
                             # Loosened the criteria to capture more documentation pages
                             if any(pattern in absolute_url for pattern in content_patterns) or absolute_url.count('/') <= 6:
-                                if absolute_url not in to_crawl:
-                                    to_crawl.append(absolute_url)
+                                # Normalize the URL for Docusaurus routing with trailing slash
+                                normalized_url = normalize_url_for_docusaurus(absolute_url, trailing_slash=True)
+                                if normalized_url not in to_crawl:
+                                    to_crawl.append(normalized_url)
 
             except requests.exceptions.RequestException as e:
                 logger.warning(f"Failed to crawl {current_url}: {str(e)}")
@@ -404,6 +434,25 @@ def main():
             logger.error("No content extracted from any URLs")
             return False
 
+        # Validate that we have unique content from different URLs
+        logger.info("Validating content uniqueness...")
+        unique_contents = set()
+        duplicate_count = 0
+        for i, content in enumerate(contents):
+            content_hash = hash(content.content[:100] if len(content.content) > 100 else content.content)  # Use first 100 chars as hash
+            if content_hash in unique_contents:
+                logger.warning(f"Duplicate content detected for {content.file_path}")
+                duplicate_count += 1
+            else:
+                unique_contents.add(content_hash)
+
+        logger.info(f"Out of {len(contents)} URLs, found {len(unique_contents)} unique content items, {duplicate_count} duplicates")
+
+        if len(unique_contents) < len(contents) * 0.5:  # If more than 50% are duplicates
+            logger.warning("High percentage of duplicate content detected - this may indicate content extraction issues")
+        else:
+            logger.info("Content diversity looks good")
+
         # Step 3: Chunk the text
         logger.info("Step 3: Chunking text content...")
         chunks = []
@@ -424,16 +473,17 @@ def main():
             logger.error("No embeddings generated")
             return False
 
-        # Step 5: Create Qdrant collection
-        logger.info("Step 5: Creating Qdrant collection...")
-        collection_created = create_collections(collection_name="rag_embeddings")
+        # Step 5: Create Qdrant collection with specific name for the deployed site
+        collection_name = "docusaurus_hackathon_4_embeddings"
+        logger.info(f"Step 5: Creating Qdrant collection '{collection_name}'...")
+        collection_created = create_collections(collection_name=collection_name)
         if not collection_created:
             logger.error("Failed to create Qdrant collection")
             return False
 
         # Step 6: Save embeddings to Qdrant
         logger.info("Step 6: Saving embeddings to Qdrant...")
-        save_success = save_chunk_to_qdrant(embeddings, chunks, contents, collection_name="rag_embeddings")
+        save_success = save_chunk_to_qdrant(embeddings, chunks, contents, collection_name=collection_name)
         if not save_success:
             logger.error("Failed to save embeddings to Qdrant")
             return False

@@ -64,16 +64,81 @@ class TextExtractionService:
             response = requests.get(url)
             response.raise_for_status()
 
-            # Convert Markdown to HTML then extract text
-            html = markdown.markdown(response.text)
-            soup = BeautifulSoup(html, 'html.parser')
+            # Parse the HTML content from the response
+            soup = BeautifulSoup(response.text, 'html.parser')
 
-            # Extract clean text
-            clean_text = soup.get_text(separator=' ', strip=True)
+            # Remove script and style elements
+            for script in soup(["script", "style"]):
+                script.decompose()
 
-            # Extract title
-            title_tag = soup.find('title')
-            title = title_tag.get_text() if title_tag else urlparse(url).path.split('/')[-1]
+            # For Docusaurus sites, the main content is typically in specific containers
+            # Try multiple selectors to find the main content area
+            main_content = None
+
+            # Try to find the main content area in order of preference
+            selectors_to_try = [
+                'article #__docusaurus',  # Docusaurus main content area
+                'main div[class*="docItem"]',  # Docusaurus doc item container
+                'main div[class*="container"]',  # Docusaurus container
+                'main div[class*="theme"]',  # Docusaurus theme container
+                'main',  # Main content area
+                'article',  # Standard article tag
+                'div[class*="main"]',  # Main wrapper
+                'div[class*="container"] div[class*="row"] div[class*="col"]',  # Bootstrap-style grid
+                'div[class*="theme-doc"]',  # Docusaurus theme doc container
+                'div[class*="doc"]',  # Docusaurus doc container
+                'div[class*="markdown"]',  # Markdown content area
+                soup  # Fallback to entire document
+            ]
+
+            for selector in selectors_to_try:
+                if isinstance(selector, str):
+                    # It's a CSS selector
+                    main_content = soup.select_one(selector)
+                    if main_content:
+                        break
+                else:
+                    # It's the soup object (fallback)
+                    main_content = selector
+                    break
+
+            # If we found specific content, extract text from it; otherwise use the entire document
+            if main_content and main_content != soup:
+                clean_text = main_content.get_text(separator=' ', strip=True)
+            else:
+                # Remove header and footer to focus on main content
+                for element in soup.find_all(['header', 'footer', 'nav', 'aside']):
+                    element.decompose()
+                clean_text = soup.get_text(separator=' ', strip=True)
+
+            # Extract title from the page - prioritize h1 in main content, then title tag
+            title = None
+
+            # First, try to find h1 in the main content area
+            if main_content:
+                h1_tag = main_content.find('h1')
+                if h1_tag:
+                    title = h1_tag.get_text().strip()
+
+            # If no h1 in main content, try title tag
+            if not title:
+                title_tag = soup.find('title')
+                if title_tag:
+                    title = title_tag.get_text().strip()
+
+            # If still no title, try to find h1 in the entire document
+            if not title:
+                h1_tag = soup.find('h1')
+                if h1_tag:
+                    title = h1_tag.get_text().strip()
+
+            # If still no title, use URL path
+            if not title:
+                title = urlparse(url).path.split('/')[-1]
+
+            # Clean up the title
+            if title:
+                title = title.replace(' | ROS 2 Fundamentals for Humanoid Robotics', '').replace(' | Docusaurus', '').strip()
 
             # Create a temporary ID based on URL
             content_id = url

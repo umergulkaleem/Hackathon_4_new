@@ -49,7 +49,20 @@
       "Bash(curl -s https://hackathon-4-puce.vercel.app/)",
       "Bash(timeout 60 python -m src.api.main)",
       "Bash(curl -I https://hackathon-4-new.vercel.app/)",
-      "Bash(curl -I https://hackathon-4-new.vercel.app/docs/intro)"
+      "Bash(curl -I https://hackathon-4-new.vercel.app/docs/intro)",
+      "Bash(dir \"C:\\\\Users\\\\Me\\\\Desktop\\\\GIAIC\\\\Q4\\\\Hackathon\\\\Hackathon_4\" /s)",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''C:\\\\Users\\\\Me\\\\Desktop\\\\GIAIC\\\\Q4\\\\Hackathon\\\\Hackathon_4'' -Recurse\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''C:\\\\Users\\\\Me\\\\Desktop\\\\GIAIC\\\\Q4\\\\Hackathon\\\\Hackathon_4\\\\book_frontend\\\\build'' -Recurse | Where-Object { $_Name -like ''*.html'' } | Select-Object -First 5\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''C:\\\\Users\\\\Me\\\\Desktop\\\\GIAIC\\\\Q4\\\\Hackathon\\\\Hackathon_4\\\\book_frontend\\\\build'' -Recurse -Filter ''*.html'' | Select-Object -First 5\")",
+      "Bash(dir \"C:\\\\Users\\\\Me\\\\Desktop\\\\GIAIC\\\\Q4\\\\Hackathon\\\\Hackathon_4\\\\book_frontend\\\\build\\\\docs\" /s)",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''C:\\\\Users\\\\Me\\\\Desktop\\\\GIAIC\\\\Q4\\\\Hackathon\\\\Hackathon_4\\\\book_frontend\\\\build\\\\docs'' -Recurse | Where-Object { $_PSIsContainer -or $_Name -like ''*.html'' } | Select-Object FullName | head -20\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''C:\\\\Users\\\\Me\\\\Desktop\\\\GIAIC\\\\Q4\\\\Hackathon\\\\Hackathon_4\\\\book_frontend\\\\build\\\\docs'' -Recurse -Name | Where-Object { $_-like ''*.html'' } | Select-Object -First 10\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''C:\\\\Users\\\\Me\\\\Desktop\\\\GIAIC\\\\Q4\\\\Hackathon\\\\Hackathon_4\\\\book_frontend\\\\build\\\\docs'' -Recurse -Include ''*.html'' | Select-Object -First 10 | ForEach-Object { $_Name }\")",
+      "Bash(curl -s https://hackathon-4-new.vercel.app/docs/intro)",
+      "Bash(curl -s https://hackathon-4-new.vercel.app/docs/module1-ros2/fundamentals)",
+      "Bash(curl -s https://hackathon-4-new.vercel.app/sitemap.xml)",
+      "Bash(python -c \"\nimport sys\nsys.path.insert\\(0, ''.''\\)\nfrom src.api.main import main\nsuccess = main\\(\\)\nif success:\n    print\\(''Pipeline completed successfully!''\\)\n    sys.exit\\(0\\)\nelse:\n    print\\(''Pipeline failed!''\\)\n    sys.exit\\(1\\)\n\")",
+      "Bash(python -c \"\nimport sys\nsys.path.insert\\(0, ''.''\\)\nfrom src.api.main import main\nsuccess = main\\(\\)\nprint\\(f''Pipeline completed with success: {success}''\\)\n\")"
     ],
     "deny": [],
     "ask": []
