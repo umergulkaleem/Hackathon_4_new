@@ -21,7 +21,7 @@ const config = {
   organizationName: "GIAIC", // Usually your GitHub org/user name.
   projectName: "book_frontend", // Usually your repo name.
   deploymentBranch: "gh-pages",
-  trailingSlash: false,
+  trailingSlash: true,
 
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
