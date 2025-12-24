@@ -12,10 +12,11 @@ class Metadata(BaseModel):
     word_count: int = 0
     content_type: str = "text"
     retrieval_score: Optional[float] = None
+    content: Optional[str] = None  # Store the actual text content for easy retrieval during RAG
 
     def to_payload(self) -> dict:
         """Convert metadata to a payload suitable for Qdrant storage."""
-        return {
+        payload = {
             "source_file": self.source_file,
             "document_title": self.document_title,
             "chunk_index": self.chunk_index,
@@ -24,6 +25,10 @@ class Metadata(BaseModel):
             "content_type": self.content_type,
             "retrieval_score": self.retrieval_score
         }
+        # Only add content if it's present to keep payloads smaller when not needed
+        if self.content is not None:
+            payload["content"] = self.content
+        return payload
 
     @classmethod
     def from_payload(cls, payload: dict) -> 'Metadata':
@@ -35,5 +40,6 @@ class Metadata(BaseModel):
             headers_hierarchy=payload.get("headers_hierarchy", ""),
             word_count=payload.get("word_count", 0),
             content_type=payload.get("content_type", "text"),
-            retrieval_score=payload.get("retrieval_score")
+            retrieval_score=payload.get("retrieval_score"),
+            content=payload.get("content")  # Add content field from payload
         )
